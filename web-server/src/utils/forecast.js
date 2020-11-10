@@ -12,7 +12,12 @@ const forecast = (lat, lon, callback) => {
     } else {
       const data = body;
       console.log(data);
-      const message = `${data.weather[0].main}. It is currently ${data.main.temp} degrees out. It feels like ${data.main.feels_like} degrees out.`;
+      const message = `
+        ${data.weather[0].main}.
+        It is currently ${data.main.temp}F out.
+        It feels like ${data.main.feels_like}F out.
+        Min: ${data.main.temp_min}F
+        Max: ${data.main.temp_max}F`;
       callback(undefined, message);
     }
   });
