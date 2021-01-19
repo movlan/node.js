@@ -13,6 +13,6 @@ mongoose.connect(
       return console.log(err);
     }
 
-    console.log("Connected to database");
+    // console.log("Connected to database");
   }
 );
