@@ -40,6 +40,11 @@ io.on("connection", (socket) => {
         generateMessage("System", `${user.username} has joined`)
       );
 
+    io.to(user.room).emit("roomData", {
+      room: user.room,
+      users: getUsersInRoom(user.room),
+    });
+
     cb();
   });
 
@@ -55,17 +60,6 @@ io.on("connection", (socket) => {
     cb();
   });
 
-  socket.on("disconnect", () => {
-    const user = removeUser(socket.id);
-
-    if (user) {
-      io.to(user.room).emit(
-        "message",
-        generateMessage(user.username, `${user.username} has left`)
-      );
-    }
-  });
-
   socket.on("sendLocation", (cords, cb) => {
     const user = getUser(socket.id);
 
@@ -77,6 +71,21 @@ io.on("connection", (socket) => {
       ),
       cb()
     );
+  });
+
+  socket.on("disconnect", () => {
+    const user = removeUser(socket.id);
+
+    if (user) {
+      io.to(user.room).emit(
+        "message",
+        generateMessage(user.username, `${user.username} has left`)
+      );
+      io.to(user.room).emit("roomData", {
+        room: user.room,
+        users: getUsersInRoom(user.room),
+      });
+    }
   });
 });
 
